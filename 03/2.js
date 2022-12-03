@@ -35,6 +35,4 @@ const solve = () => {
   }, 0);
 };
 
-console.log(intersectGroup(['a', 'a', 'a']));
-
 console.log(solve());
