@@ -51,9 +51,7 @@ const solve = (part) => {
     }
   });
 
-  return cargoStacks.reduce((message, stack, i) => {
-    return (message += stack.at(-1));
-  }, '');
+  return cargoStacks.reduce((message, stack) => (message += stack.at(-1)), '');
 };
 
 console.log(solve(1));
