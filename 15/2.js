@@ -7,10 +7,10 @@ const getInput = () => {
 const getSensorData = (input) => {
   const sensors = [];
   const beacons = [];
+  const regex = /-?[0-9]+/g;
 
   input.forEach((reading) => {
-    const regex = /=-?[0-9]*/g;
-    const [sensorX, sensorY, beaconX, beaconY] = [...reading.matchAll(regex)].map((match) => Number(match[0].slice(1)));
+    const [sensorX, sensorY, beaconX, beaconY] = reading.match(regex).map(Number);
     const distance = Math.abs(sensorX - beaconX) + Math.abs(sensorY - beaconY);
     sensors.push({ x: sensorX, y: sensorY, distance });
     beacons.push({ x: beaconX, y: beaconY });
