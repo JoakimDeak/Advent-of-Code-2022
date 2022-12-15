@@ -1,4 +1,5 @@
 const fs = require('fs');
+console.log;
 
 const getInput = () => {
   return fs.readFileSync('./input.txt', { encoding: 'utf-8' }).split('\r\n');
@@ -28,28 +29,23 @@ const canBeaconExistAt = (point, sensorData) => {
 
 const getBorderPoints = (sensors) => {
   return sensors.flatMap((sensor) => {
-    console.log('getting border points for sensor at', [sensor.x, sensor.y]);
-
-    const points = [];
+    const { x: sx, y: sy, distance: sd } = sensor;
+    console.log('getting border points for sensor at', [sx, sy]);
 
     const xList = [];
-    for (let x = sensor.x - sensor.distance - 1; x <= sensor.x + sensor.distance + 1; x++) {
+    for (let x = sx - sd - 1; x <= sx + sd + 1; x++) {
       xList.push(x);
     }
 
-    let leftX = Math.floor(xList.length / 2);
-    let rightX = Math.floor(xList.length / 2);
+    let lx = (rx = xList.length / 2);
 
-    for (let y = sensor.y - sensor.distance - 1; y <= sensor.y + sensor.distance + 1; y++) {
-      points.push([xList[leftX], y]);
-      points.push([xList[rightX], y]);
-      if (y < sensor.y) {
-        leftX--;
-        rightX++;
-      } else {
-        leftX++;
-        rightX--;
-      }
+    const points = [];
+    for (let y = sy - sd - 1; y <= sy + sd + 1; y++) {
+      points.push([xList.at(lx), y]);
+      points.push([xList.at(rx), y]);
+
+      lx += y < sy ? -1 : 1;
+      rx += y < sy ? 1 : -1;
     }
     return points;
   });
