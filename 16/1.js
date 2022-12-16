@@ -36,15 +36,15 @@ const addWeightedEdges = (graph, node) => {
   }
 };
 
-const getMaxFlow = (graph) => {
+const getMaxPressure = (graph) => {
   const TIME_LIMIT = 30;
   const queue = [];
-  let maxFlow = 0;
+  let maxPressure = 0;
 
   const root = {
     valve: 'AA',
     timeElapsed: 0,
-    flow: 0,
+    pressure: 0,
     openValves: []
   };
   queue.push(root);
@@ -55,8 +55,8 @@ const getMaxFlow = (graph) => {
     const options = Object.keys(graph).filter((valve) => graph[valve].flow > 0 && !curr.openValves.includes(valve));
 
     if (options.length === 0) {
-      if (maxFlow < curr.flow) {
-        maxFlow = curr.flow;
+      if (maxPressure < curr.pressure) {
+        maxPressure = curr.pressure;
       }
       continue;
     }
@@ -64,27 +64,27 @@ const getMaxFlow = (graph) => {
     options.forEach((option) => {
       const cost = graph[curr.valve].edges[option] + 1;
       if (curr.timeElapsed + cost >= TIME_LIMIT) {
-        if (maxFlow < curr.flow) {
-          maxFlow = curr.flow;
+        if (maxPressure < curr.pressure) {
+          maxPressure = curr.pressure;
         }
       } else {
         const newTime = curr.timeElapsed + cost;
         queue.push({
           valve: option,
           timeElapsed: newTime,
-          flow: curr.flow + (TIME_LIMIT - newTime) * graph[option].flow,
+          pressure: curr.pressure + (TIME_LIMIT - newTime) * graph[option].flow,
           openValves: [...curr.openValves, option]
         });
       }
     });
   }
-  return maxFlow;
+  return maxPressure;
 };
 
 const solve = () => {
   const input = getInput();
   const graph = buildGraph(input);
-  return getMaxFlow(graph);
+  return getMaxPressure(graph);
 };
 
 console.log(solve());
